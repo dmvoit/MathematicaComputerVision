@@ -5,3 +5,5 @@ docbuild.xml
 .MathematicaResources
 Testing.nb
 Testing.m
+Testing.wls
+.idea

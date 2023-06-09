@@ -24,7 +24,7 @@ SeparateSquares[img_]:=SeparateSquares[img,3];
 SeparateSquares[img_,n_]:=
 	Module[ {bin, noborders,components},
 		(* Binarize *)
-		bin = ColorNegate[Binarize[img]];
+		bin = ColorNegate@Binarize[img];
 		
 		(* Remove border components *)
 		noborders = DeleteBorderComponents[bin];
@@ -50,7 +50,7 @@ CornersInQuadrangleImage[square_] :=
 		lines=ImageLines[edges,MaxFeatures->4];
 		
 		(* Convert them to homogeneous lines *)
-		hglines=LineThrough[Hgc[#1],Hgc[#2]]& @@@ lines;
+		hglines=LineThrough[Hgc[#1],Hgc[#2]]& @@@ lines[[All,1]];
 		
 		(* Sort by direction to make sure the intersections are cornerpoints *)
 		hglines=SortBy[hglines,LineDirection[#]&];
