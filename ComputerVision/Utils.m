@@ -42,7 +42,7 @@ LineThrough[p_,q_] :=
 
 LineDirection[l_] :=
 	If[l[[2]]==0,
-		ArcTan[ComplexInfinity],
+		ArcTan[Infinity],
 		ArcTan[-l[[1]]/l[[2]]]
 	];
 
