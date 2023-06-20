@@ -56,21 +56,9 @@ RQ[A_] :=
 		{r, q}
 	];
 
-Rx[a_] := ( {
-    {1, 0, 0},
-    {0, Cos[a], -Sin[a]},
-    {0, Sin[a], Cos[a]}
-   } );
-Ry[b_] := ( {
-    {Cos[b], 0, Sin[b]},
-    {0, 1, 0},
-    {-Sin[b], 0, Cos[b]}
-   } );
-Rz[c_] := ( {
-    {Cos[c], -Sin[c], 0},
-    {Sin[c], Cos[c], 0},
-    {0, 0, 1}
-   } );
+Rx[a_] := RotationMatrix[a, {1, 0, 0}];
+Ry[b_] := RotationMatrix[b, {0, 1, 0}];
+Rz[c_] := RotationMatrix[c, {0, 0, 1}];
 Rxyz[a_, b_, c_] := Rz[c].Ry[b].Rx[a];
 DecomposeRotation[R_] := {
    ArcTan[R[[3, 3]], R[[3, 2]]],

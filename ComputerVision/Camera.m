@@ -53,11 +53,9 @@ CameraDecompose[P_] :=
 		(* Return values found. *)
 		{K,R,t}
 	];
-	
-DrawCamera[P_] := DrawCamera[P,1];
-DrawCamera[P_,size_] := DrawCamera[P,size,Null];
-DrawCamera[P_,s_,img_] :=
-	Module[{K,R,t,f,Rinv,pts,w,h,px,py,size,det},
+
+DrawCamera[P_, size_ : 1, img_ : Null] :=
+	Module[{K,R,t,f,Rinv,pts,w,h,px,py,det},
 		(* Decompose the camera to get all parameters. *)
 		{K,R,t} = CameraDecompose[P];
 		(* Take the average value for f. *)
@@ -67,23 +65,18 @@ DrawCamera[P_,s_,img_] :=
 		(* Calculate the inverse rotation matrix. *)
 		Rinv = Inverse[R];
 		(* The displayed principal point distance is 1 x the sign of f. *)
-		size = s;
 		(* Other values *)
 		px = K[[1,3]];
 		py = K[[2,3]];
-		If[ img === Null,
-			{w,h} = 2{px,py},
-			{w,h} = ImageDimensions[img]
-		];
 		(* The determinant of M is used to determine axis direction *)
 		det = Det[P[[All,1;;3]]];
 		(* Define the points and transform them. *)
-		pts = size {
+		pts = size*{
 			{0, 0, 0},
-			{(-px)/f, (-py)/f, 1},
-			{(-px)/f, (h - py)/f, 1},
-			{(w - px)/f, (h - py)/f, 1},
-			{(w - px)/f, (-py)/f, 1},
+			{-px / f, -py / f, 1},
+			{-px / f, py / f, 1},
+			{ px / f, py / f, 1},
+			{ px / f, -py / f, 1},
 			{Sign[det], 0, 0},
 			{0, Sign[det], 0}
 		};
@@ -91,14 +84,11 @@ DrawCamera[P_,s_,img_] :=
 		(* Return the graphics primitives. *)
 		{
 			 PointSize[Large], Point[pts[[1]]],
-			 Polygon[pts[[Range[2, 5]]]],
-			 Thick, Red, Arrow[pts[[{1, 6}]]],
+			 Thick,
+			 Red, Arrow[pts[[{1, 6}]]],
 			 Green, Arrow[pts[[{1, 7}]]],
 			 Gray, Opacity[.2],
-			 Polygon[pts[[{1, 2, 3}]]],
-			 Polygon[pts[[{1, 3, 4}]]],
-			 Polygon[pts[[{1, 4, 5}]]],
-			 Polygon[pts[[{1, 5, 1}]]]
+			 Pyramid[pts[[2;;5]]//Append[pts[[1]]]]
 		 }
 	];
 
